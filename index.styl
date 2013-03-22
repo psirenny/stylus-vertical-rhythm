@@ -1,6 +1,7 @@
 $base-font-size ?= .75em
 $base-line-height ?= 1.625em
 $browser-font-size ?= 16px
+$browser-supports-rems ?= false
 $minimum-line-padding ?= .25rem
 
 default-font-size()
@@ -67,6 +68,9 @@ normalize-font-size(font-size, parent-font-size = null, root = false)
     return val
 
 rym(length, font-size = default-font-size(), parent-font-size = default-parent-font-size(), root = false)
+  if ($browser-supports-rems)
+    return unit(length * normalize-font-size($base-line-height) / normalize-font-size($base-font-size, null, true), "rem")
+
   return unit(length * normalize-font-size($base-line-height) / normalize-font-size(font-size, parent-font-size, root), "em")
 
 font-size(font-size, parent-font-size = default-parent-font-size(), root = false)

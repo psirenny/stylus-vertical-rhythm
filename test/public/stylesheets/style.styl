@@ -1,6 +1,7 @@
 $base-font-size ?= .75em
 $base-line-height ?= 1.625em
 $browser-font-size ?= 16px
+$browser-supports-rems ?= false
 $minimum-line-padding ?= .25rem
 
 default-parent-font-size()
@@ -10,9 +11,7 @@ default-font-size()
   return @font-size ? @font-size : 1em
 
 lines-in-font-size(font-size = default-font-size(), parent-font-size = default-parent-font-size(), root = false)
-  p(font-size)
   font-size = normalize-font-size(font-size, parent-font-size, root)
-  p(font-size)
   base-line-height = normalize-font-size($base-line-height)
   min-padding = 2 * normalize-font-size($minimum-line-padding)
   lines = ceil(font-size / base-line-height)
@@ -69,7 +68,14 @@ normalize-font-size(font-size, parent-font-size = null, root = false)
     return val
 
 rym(length, font-size = default-font-size(), parent-font-size = default-parent-font-size(), root = false)
-  return unit(length * normalize-font-size($base-line-height) / normalize-font-size(font-size, parent-font-size, root), "em")
+  unit-type = $browser-supports-rems ? "rem" : "em"
+
+  if ($browser-supports-rems)
+    font-size = $base-font-size
+    parent-font-size = null
+    root = true
+
+  return unit(length * normalize-font-size($base-line-height) / normalize-font-size(font-size, parent-font-size, root), unit-type)
 
 font-size(font-size, parent-font-size = default-parent-font-size(), root = false)
   font-size font-size
@@ -77,12 +83,6 @@ font-size(font-size, parent-font-size = default-parent-font-size(), root = false
     line-height 1 font-size parent-font-size root
 
 line-height(height, font-size = default-font-size(), parent-font-size = default-parent-font-size(), root = false)
-  p('s')
-  p('height: ' + height)
-  p('font-size: ' + font-size)
-  p('parent-font-size: ' + parent-font-size)
-  p('root: ' + root)
-  p('\n')
   if unit(arguments) == ""
     lines = arguments * lines-in-font-size(font-size, parent-font-size, root)
     line-height rym(lines, font-size, parent-font-size, root)
