@@ -21,10 +21,10 @@ normalize-font-size(font-size, parent-font-size = null, root = false)
   u = unit(font-size)
   val = unit(font-size, "")
 
-  return val if (u == "") // the font is already normalized
+  return val if (u == "") // the font size is already normalized
 
   unless unit($browser-font-size) == "px"
-    error("brower font size must be specified in pixels")
+    error("browser font size must be specified in pixels")
 
   if (root) && (u == "rem")
     error("cannot specify font size in rems on the root")
@@ -35,33 +35,33 @@ normalize-font-size(font-size, parent-font-size = null, root = false)
   else if (parent-font-size) && (u == "em")
     u = unit(parent-font-size)
     val *= unit(parent-font-size, "")
-  else if u == "in"
+  else if (u == "in")
     u = "px"
     val *= 96
-  else if u == "cm"
+  else if (u == "cm")
     u = "px"
     val *= 37.8
-  else if u == "mm"
+  else if (u == "mm")
     u = "px"
     val *= 3.78
-  else if u == "pt"
+  else if (u == "pt")
     u = "px"
     val *= 96/72
-  else if u == "pc"
+  else if (u == "pc")
     u = "px"
     val *= 16
 
   unless root
-    if u == "%"
+    if (u == "%")
       u = unit($base-font-size)
       val *= $base-font-size / 100
     else if (u == "em") || (u == "rem")
       u = unit($base-font-size)
       val *= unit($base-font-size, "")
 
-  if u == "%"
+  if (u == "%")
     return val * unit($browser-font-size, "") / 100
-  else if u == "em" || u == "rem"
+  else if (u == "em") || (u == "rem")
     return val * unit($browser-font-size, "")
   else if u == "px"
     return val
