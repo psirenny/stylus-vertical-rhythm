@@ -1,0 +1,10 @@
+{
+  "name": "vertical-rhythm",
+  "version": "0.0.0",
+  "main": "index.styl",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ]
+}

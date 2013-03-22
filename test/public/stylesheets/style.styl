@@ -1,0 +1,166 @@
+$base-font-size ?= .75em
+$base-line-height ?= 1.625em
+$browser-font-size ?= 16px
+$minimum-line-padding ?= .25rem
+
+default-parent-font-size()
+  return @parent-font-size
+
+default-font-size()
+  return @font-size ? @font-size : 1em
+
+lines-in-font-size(font-size = default-font-size(), parent-font-size = default-parent-font-size(), root = false)
+  p(font-size)
+  font-size = normalize-font-size(font-size, parent-font-size, root)
+  p(font-size)
+  base-line-height = normalize-font-size($base-line-height)
+  min-padding = 2 * normalize-font-size($minimum-line-padding)
+  lines = ceil(font-size / base-line-height)
+  lines = lines + 1 if (lines * base-line-height - font-size < min-padding)
+  return lines
+
+normalize-font-size(font-size, parent-font-size = null, root = false)
+  u = unit(font-size)
+  val = unit(font-size, "")
+
+  return val if (u == "") // the font is already normalized
+
+  unless unit($browser-font-size) == "px"
+    error("brower font size must be specified in pixels")
+
+  if (root) && (u == "rem")
+    error("cannot specify font size in rems on the root")
+
+  if (parent-font-size) && (u == "%")
+    u = unit(parent-font-size)
+    val *= unit(parent-font-size / 100, "")
+  else if (parent-font-size) && (u == "em")
+    u = unit(parent-font-size)
+    val *= unit(parent-font-size, "")
+  else if u == "in"
+    u = "px"
+    val *= 96
+  else if u == "cm"
+    u = "px"
+    val *= 37.8
+  else if u == "mm"
+    u = "px"
+    val *= 3.78
+  else if u == "pt"
+    u = "px"
+    val *= 96/72
+  else if u == "pc"
+    u = "px"
+    val *= 16
+
+  unless root
+    if u == "%"
+      u = unit($base-font-size)
+      val *= $base-font-size / 100
+    else if (u == "em") || (u == "rem")
+      u = unit($base-font-size)
+      val *= unit($base-font-size, "")
+
+  if u == "%"
+    return val * unit($browser-font-size, "") / 100
+  else if u == "em" || u == "rem"
+    return val * unit($browser-font-size, "")
+  else if u == "px"
+    return val
+
+rym(length, font-size = default-font-size(), parent-font-size = default-parent-font-size(), root = false)
+  return unit(length * normalize-font-size($base-line-height) / normalize-font-size(font-size, parent-font-size, root), "em")
+
+font-size(font-size, parent-font-size = default-parent-font-size(), root = false)
+  font-size font-size
+  unless @line-height
+    line-height 1 font-size parent-font-size root
+
+line-height(height, font-size = default-font-size(), parent-font-size = default-parent-font-size(), root = false)
+  p('s')
+  p('height: ' + height)
+  p('font-size: ' + font-size)
+  p('parent-font-size: ' + parent-font-size)
+  p('root: ' + root)
+  p('\n')
+  if unit(arguments) == ""
+    lines = arguments * lines-in-font-size(font-size, parent-font-size, root)
+    line-height rym(lines, font-size, parent-font-size, root)
+  else
+    line-height arguments
+
+parent-font-size()
+  return null // do not render this parameter
+
+margin()
+  for i in 0...length(arguments)
+    unless unit(arguments[i])
+      val = rym(arguments[i])
+      arguments[i] = val
+  margin arguments
+
+margin-bottom(n)
+  margin-bottom unit(n) ? len : rym(n)
+
+margin-left(n)
+  margin-left unit(n) ? n : rym(n)
+
+margin-right(n)
+  margin-right unit(n) ? n : rym(n)
+
+margin-top(n)
+  margin-top unit(n) ? n : rym(n)
+
+padding()
+  for i in 0...length(arguments)
+    unless unit(arguments[i])
+      val = rym(arguments[i])
+      arguments[i] = val
+  padding arguments
+
+padding-bottom(n)
+  padding-bottom val
+
+padding-left(n)
+  padding-left unit(n) ? n : rym(n)
+
+padding-right(n)
+  padding-right unit(n) ? n : rym(n)
+
+padding-top(n)
+  padding-top unit(n) ? n : rym(n)
+
+html
+  font-size($base-font-size, null, true)
+
+.div,
+.p,
+.h1,
+.small
+  display block
+  font-family sans-serif
+  margin 0
+
+.div
+  color #333
+  font-size 3.5em
+  font-weight normal
+  margin 1 0
+  margin-top 1
+  padding 1.5 0
+
+.span
+  line-height 2
+
+.h1
+  font-size 200%
+  font-weight normal
+  parent-font-size 3.5em
+
+.p
+  color #999
+  font-size 1em
+
+.small
+  font-size 1rem
+  line-height (2/3)

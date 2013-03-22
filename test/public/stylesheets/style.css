@@ -1,0 +1,38 @@
+html {
+  font-size: 0.75em;
+  line-height: 1.625em;
+}
+.div,
+.p,
+.h1,
+.small {
+  display: block;
+  font-family: sans-serif;
+  margin: 0em;
+}
+.div {
+  color: #333;
+  font-size: 3.5em;
+  line-height: 1.3928571428571428em;
+  font-weight: normal;
+  margin: 0.4642857142857143em 0em;
+  margin-top: 0.4642857142857143em;
+  padding: 0.6964285714285714em 0em;
+}
+.span {
+  line-height: 3.25em;
+}
+.h1 {
+  font-size: 200%;
+  line-height: 1.1607142857142856em;
+  font-weight: normal;
+}
+.p {
+  color: #999;
+  font-size: 1em;
+  line-height: 1.625em;
+}
+.small {
+  font-size: 1rem;
+  line-height: 1.0833333333333333em;
+}
