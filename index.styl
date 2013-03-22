@@ -3,11 +3,11 @@ $base-line-height ?= 1.625em
 $browser-font-size ?= 16px
 $minimum-line-padding ?= .25rem
 
-default-parent-font-size()
-  return @parent-font-size
-
 default-font-size()
   return @font-size ? @font-size : 1em
+
+default-parent-font-size()
+  return @parent-font-size
 
 lines-in-font-size(font-size = default-font-size(), parent-font-size = default-parent-font-size(), root = false)
   font-size = normalize-font-size(font-size, parent-font-size, root)
