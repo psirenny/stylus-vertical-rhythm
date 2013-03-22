@@ -63,7 +63,7 @@ normalize-font-size(font-size, parent-font-size = null, root = false)
     return val * unit($browser-font-size, "") / 100
   else if (u == "em") || (u == "rem")
     return val * unit($browser-font-size, "")
-  else if u == "px"
+  else if (u == "px")
     return val
 
 rym(length, font-size = default-font-size(), parent-font-size = default-parent-font-size(), root = false)
