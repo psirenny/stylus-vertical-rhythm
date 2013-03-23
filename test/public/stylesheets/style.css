@@ -8,16 +8,17 @@ html {
 .small {
   display: block;
   font-family: sans-serif;
-  margin: 0em;
+  margin: 1.625em;
 }
 .div {
   color: #333;
-  font-size: 3.5em;
-  line-height: 1.3928571428571428em;
+  font-size: 24px;
+  line-height: 1.625em;
   font-weight: normal;
-  margin: 0.4642857142857143em 0em;
-  margin-top: 0.4642857142857143em;
-  padding: 0.6964285714285714em 0em;
+  margin: 0.8125em auto;
+  margin-top: 0.8125em;
+  padding: 1.21875em 0em;
+  width: 200px;
 }
 .span {
   line-height: 3.25em;
