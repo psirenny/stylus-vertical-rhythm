@@ -88,7 +88,8 @@ rym(length, font-size = default-font-size(), parent-font-size = default-parent-f
     return unit(length * normalize-font-size($base-line-height) / normalize-font-size($base-font-size, null, true), 'rem')
 
   unless can-normalize-font-size(font-size, parent-font-size)
-    warn('' + s('cannot compute vertical rhythm for font-size "%s" and parent-font-size "%s"', font-size, parent-font-size))
+    msg = 'cannot compute vertical rhythm for font-size "%s" and parent-font-size "%s"'
+    warn('' + s(msg, font-size, parent-font-size))
     return
 
   return unit(length * normalize-font-size($base-line-height) / normalize-font-size(font-size, parent-font-size, root), 'em')
@@ -110,7 +111,8 @@ line-height(height, font-size = default-font-size(), parent-font-size = default-
   can-normalize = true
 
   unless can-normalize-font-size(font-size, parent-font-size)
-    warn('' + s('cannot compute vertical rhythm for font-size "%s" and parent-font-size "%s"', font-size, parent-font-size))
+    msg = 'cannot compute vertical rhythm for font-size "%s" and parent-font-size "%s"'
+    warn('' + s(msg, font-size, parent-font-size))
     can-normalize = false
 
   if (can-normalize)
