@@ -84,7 +84,7 @@ normalize-font-size(font-size, parent-font-size = null, root = false)
     return val
 
 rym(length, font-size = default-font-size(), parent-font-size = default-parent-font-size(), root = false)
-  if ($browser-supports-rems)
+  if (!root && $browser-supports-rems)
     return unit(length * normalize-font-size($base-line-height) / normalize-font-size($base-font-size, null, true), 'rem')
 
   unless can-normalize-font-size(font-size, parent-font-size)
@@ -115,14 +115,15 @@ line-height(height, font-size = default-font-size(), parent-font-size = default-
     warn('' + s(msg, font-size, parent-font-size))
     can-normalize = false
 
-  if (can-normalize)
-    if typeof(arguments) != 'unit'
-      line-height arguments
-    else if unit(arguments) == ''
-      lines = arguments * lines-in-font-size(font-size, parent-font-size, root)
-      line-height rym(lines, font-size, parent-font-size, root)
-    else
-      line-height arguments
+  return unless can-normalize
+
+  if typeof(height) != 'unit'
+    line-height height
+  else if unit(arguments) == ''
+    lines = arguments * lines-in-font-size(font-size, parent-font-size, root)
+    line-height rym(lines, font-size, parent-font-size, root)
+  else
+    line-height height
 
 parent-font-size()
   return null // do not render this parameter
