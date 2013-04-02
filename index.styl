@@ -4,9 +4,9 @@ $browser-font-size ?= 16px
 $browser-supports-rems ?= true
 $minimum-line-padding ?= .15rem
 
-can-normalize-font-size(font-size = default-font-size(), parent-font-size = default-parent-font-size(), root = false)
+can-nrym(font-size = default-font-size(), parent-font-size = default-parent-font-size(), root = false)
   if parent-font-size
-    return false unless can-normalize-font-size(parent-font-size, null, root)
+    return false unless can-nrym(parent-font-size, null, root)
 
   return false if typeof(font-size) != 'unit'
   u = unit(font-size)
@@ -27,14 +27,14 @@ default-parent-font-size()
   return @parent-font-size
 
 lines-in-font-size(font-size = default-font-size(), parent-font-size = default-parent-font-size(), root = false)
-  font-size = normalize-font-size(font-size, parent-font-size, root)
-  base-line-height = normalize-font-size($base-line-height)
-  min-padding = 2 * normalize-font-size($minimum-line-padding)
+  font-size = nrym(font-size, parent-font-size, root)
+  base-line-height = nrym($base-line-height)
+  min-padding = 2 * nrym($minimum-line-padding)
   lines = ceil(font-size / base-line-height)
   lines = lines + 1 if (lines * base-line-height - font-size < min-padding)
   return lines
 
-normalize-font-size(font-size, parent-font-size = null, root = false)
+nrym(font-size, parent-font-size = null, root = false)
   u = unit(font-size)
   val = unit(font-size, '')
 
@@ -85,14 +85,14 @@ normalize-font-size(font-size, parent-font-size = null, root = false)
 
 rym(length, font-size = default-font-size(), parent-font-size = default-parent-font-size(), root = false)
   if (!root && $browser-supports-rems)
-    return unit(length * normalize-font-size($base-line-height) / normalize-font-size($base-font-size, null, true), 'rem')
+    return unit(length * nrym($base-line-height) / nrym($base-font-size, null, true), 'rem')
 
-  unless can-normalize-font-size(font-size, parent-font-size)
+  unless can-nrym(font-size, parent-font-size)
     msg = 'cannot compute vertical rhythm for font-size "%s" and parent-font-size "%s"'
     warn('' + s(msg, font-size, parent-font-size))
     return
 
-  return unit(length * normalize-font-size($base-line-height) / normalize-font-size(font-size, parent-font-size, root), 'em')
+  return unit(length * nrym($base-line-height) / nrym(font-size, parent-font-size, root), 'em')
 
 rym-property(name, n)
   n = unit-to-rym(n)
@@ -110,7 +110,7 @@ font-size(font-size, parent-font-size = default-parent-font-size(), root = false
 line-height(height, font-size = default-font-size(), parent-font-size = default-parent-font-size(), root = false)
   can-normalize = true
 
-  unless can-normalize-font-size(font-size, parent-font-size)
+  unless can-nrym(font-size, parent-font-size)
     msg = 'cannot compute vertical rhythm for font-size "%s" and parent-font-size "%s"'
     warn('' + s(msg, font-size, parent-font-size))
     can-normalize = false
@@ -127,46 +127,6 @@ line-height(height, font-size = default-font-size(), parent-font-size = default-
 
 parent-font-size()
   return null // do not render this parameter
-
-margin()
-  for i in 0...length(arguments)
-    if typeof(arguments[i]) == 'unit'
-      unless unit(arguments[i])
-        val = rym(arguments[i])
-        arguments[i] = val if val
-  margin arguments
-
-margin-bottom(n)
-  rym-property(margin-bottom, n)
-
-margin-left(n)
-  rym-property(margin-left, n)
-
-margin-right(n)
-  rym-property(margin-right, n)
-
-margin-top(n)
-  rym-property(margin-top, n)
-
-padding()
-  for i in 0...length(arguments)
-    if typeof(arguments[i]) == 'unit'
-      unless unit(arguments[i])
-        val = rym(arguments[i])
-        arguments[i] = val if val
-  padding arguments
-
-padding-bottom(n)
-  rym-property(padding-bottom, n)
-
-padding-left(n)
-  rym-property(padding-left, n)
-
-padding-right(n)
-  rym-property(padding-right, n)
-
-padding-top(n)
-  rym-property(padding-top, n)
 
 html
   font-size($base-font-size, null, true)
